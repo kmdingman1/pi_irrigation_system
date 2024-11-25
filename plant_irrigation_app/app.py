@@ -65,10 +65,10 @@ def water_plant(plant_id, duration=4):
     GPIO.output(pump_pin, GPIO.LOW)
     return True
 
-# Automated watering system
+# Automated watering system settings
 class AutomatedWatering:
     def __init__(self):
-        self.interval = 24  # Default 24 hours
+        self.interval = 24  # Default is every 24 hours
         self.running = False
         self.thread = None
 
@@ -94,7 +94,7 @@ class AutomatedWatering:
                 if moisture == "Dry":
                     water_plant(plant_id)
                 log_watering(plant_id, moisture)
-            time.sleep(self.interval * 3600)  # Convert hours to seconds
+            time.sleep(self.interval * 3600)
 
 # Initialize automated watering system
 auto_water = AutomatedWatering()
