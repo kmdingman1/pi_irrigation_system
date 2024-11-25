@@ -20,7 +20,7 @@ def run_pump(pump_number, duration):
     time.sleep(duration)
     GPIO.output(pin, GPIO.LOW)
     print(f"Pump {pump_number} stopped")
-    time.sleep(1)  # Wait a second before next action
+    time.sleep(1)  # Wait 1 sec between activation
 
 try:
     for i, pin in enumerate(PUMP_PINS, 1):
