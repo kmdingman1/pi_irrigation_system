@@ -7,18 +7,18 @@ GPIO.setmode(GPIO.BCM)
 # Pump GPIO pins
 PUMP_PINS = [4, 22, 6, 26]
 
-# Set up GPIO pins as outputs
+# Set up GPIO pins as outputs, ensure pump start in OFF state
 for pin in PUMP_PINS:
     GPIO.setup(pin, GPIO.OUT)
-    GPIO.output(pin, GPIO.LOW)  # Ensure pumps are off initially
+    GPIO.output(pin, GPIO.LOW)  # LOW = pump OFF
 
 # Function to test pumps
 def run_pump(pump_number, duration):
     pin = PUMP_PINS[pump_number - 1]
     print(f"Running pump {pump_number} on GPIO {pin}")
-    GPIO.output(pin, GPIO.HIGH)
+    GPIO.output(pin, GPIO.HIGH) # HIGH = turn pump ON
     time.sleep(duration)
-    GPIO.output(pin, GPIO.LOW)
+    GPIO.output(pin, GPIO.LOW) # LOW = turn pump oFF
     print(f"Pump {pump_number} stopped")
     time.sleep(1)  # Wait 1 sec between activation
 
