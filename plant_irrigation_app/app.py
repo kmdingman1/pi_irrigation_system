@@ -111,7 +111,7 @@ def home():
             'moisture': check_moisture(plant_id),
             'last_watered': last_watered
         })
-    return render_template('index.html', 
+    return render_template('template.html', 
                          plants=plant_status,
                          auto_interval=auto_water.interval)
 
