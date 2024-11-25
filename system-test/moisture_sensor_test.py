@@ -29,7 +29,5 @@ try:
         print("Checking moisture sensors...")
         read_sensors()  # Check the sensors
         time.sleep(2)   # Wait for 2 seconds before checking again
-except KeyboardInterrupt:
-    print("Program stopped by user")
 finally:
     GPIO.cleanup()  # Reset GPIO settings when exiting
