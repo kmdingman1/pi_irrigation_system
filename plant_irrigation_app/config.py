@@ -1,4 +1,4 @@
-# GPIO Pin configurations
+# Pin configurations
 MOISTURE_SENSORS = {
     1: {'sensor': 17, 'pump': 4},    # Plant 1
     2: {'sensor': 27, 'pump': 22},   # Plant 2
