@@ -4,7 +4,6 @@ import threading
 import time
 from datetime import datetime
 import sqlite3
-import os
 
 app = Flask(__name__)
 
