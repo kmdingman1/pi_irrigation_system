@@ -18,11 +18,11 @@ MOISTURE_SENSORS = {
 # Initialize GPIO
 GPIO.setmode(GPIO.BCM)
 for station in MOISTURE_SENSORS.values():
-    GPIO.setup(station['sensor'], GPIO.IN)
-    GPIO.setup(station['pump'], GPIO.OUT)
-    GPIO.output(station['pump'], GPIO.LOW)
+    GPIO.setup(station['sensor'], GPIO.IN) # Sensors as input
+    GPIO.setup(station['pump'], GPIO.OUT) # Pump as output
+    GPIO.output(station['pump'], GPIO.LOW) # Ensure pumps are off
 
-# Database setup
+# Database setup for watering history
 def init_db():
     conn = sqlite3.connect('irrigation_history.db')
     c = conn.cursor()
@@ -33,7 +33,7 @@ def init_db():
 
 init_db()
 
-# Watering history
+# Log watering events to DB
 def log_watering(plant_id, moisture_level):
     conn = sqlite3.connect('irrigation_history.db')
     c = conn.cursor()
@@ -43,6 +43,7 @@ def log_watering(plant_id, moisture_level):
     conn.commit()
     conn.close()
 
+# Get last watering time for a plant
 def get_last_watering(plant_id):
     conn = sqlite3.connect('irrigation_history.db')
     c = conn.cursor()
@@ -52,11 +53,12 @@ def get_last_watering(plant_id):
     conn.close()
     return result if result else (None, None)
 
-# Plant monitoring and watering functions
+# Check moisture levels
 def check_moisture(plant_id):
     sensor_pin = MOISTURE_SENSORS[plant_id]['sensor']
     return "Dry" if GPIO.input(sensor_pin) else "Wet"
 
+# Water plant
 def water_plant(plant_id, duration=4):
     pump_pin = MOISTURE_SENSORS[plant_id]['pump']
     GPIO.output(pump_pin, GPIO.HIGH)
@@ -67,10 +69,11 @@ def water_plant(plant_id, duration=4):
 # Automated watering system settings
 class AutomatedWatering:
     def __init__(self):
-        self.interval = 24  # Default is every 24 hours
+        self.interval = 24  # Default check interval is every 24 hours
         self.running = False
         self.thread = None
 
+    # Start automated watering
     def start(self):
         if not self.running:
             self.running = True
@@ -78,14 +81,17 @@ class AutomatedWatering:
             self.thread.daemon = True
             self.thread.start()
 
+    # Stop automated watering
     def stop(self):
         self.running = False
         if self.thread:
             self.thread.join()
 
+    # Change automation interval
     def set_interval(self, hours):
         self.interval = hours
 
+    # Automated watering loop
     def _run(self):
         while self.running:
             for plant_id in MOISTURE_SENSORS:
@@ -98,7 +104,7 @@ class AutomatedWatering:
 # Initialize automated watering system
 auto_water = AutomatedWatering()
 
-# Flask routes
+# Flask route for home page
 @app.route('/')
 def home():
     plant_status = []
@@ -113,7 +119,8 @@ def home():
     return render_template('template.html', 
                          plants=plant_status,
                          auto_interval=auto_water.interval)
-
+    
+# Check plant moisture
 @app.route('/check_plant/<int:plant_id>')
 def check_plant(plant_id):
     moisture = check_moisture(plant_id)
@@ -124,6 +131,7 @@ def check_plant(plant_id):
         'last_watered': timestamp if timestamp else "Never"
     })
 
+# Water plant
 @app.route('/water_plant/<int:plant_id>')
 def water_plant_route(plant_id):
     moisture = check_moisture(plant_id)
@@ -131,12 +139,14 @@ def water_plant_route(plant_id):
     log_watering(plant_id, moisture)
     return jsonify({})
 
+# Set watering inteval
 @app.route('/set_interval', methods=['POST'])
 def set_interval():
     hours = int(request.form['hours'])
     auto_water.set_interval(hours)
     return jsonify({})
 
+# Toggle automated watering
 @app.route('/toggle_auto', methods=['POST'])
 def toggle_auto():
     action = request.form.get('action')
@@ -145,6 +155,7 @@ def toggle_auto():
     elif action == 'stop':
         auto_water.stop()
     return jsonify({})
+
 
 if __name__ == '__main__':
     try:
