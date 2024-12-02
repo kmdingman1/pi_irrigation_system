@@ -3,7 +3,7 @@ import time
 
 GPIO.setmode(GPIO.BCM)
 
-# Sensor GPIO pind
+# Sensor GPIO pins
 sensors = {
     1: 17,  # Sensor 1 
     2: 27,  # Sensor 2
