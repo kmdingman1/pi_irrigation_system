@@ -66,10 +66,10 @@ def water_plant(plant_id, duration=4):
     GPIO.output(pump_pin, GPIO.LOW)
     return True
 
-# Automated watering system settings
+# Automated watering system
 class AutomatedWatering:
     def __init__(self):
-        self.interval = 24  # Default check interval is every 24 hours
+        self.interval = 24  # Default interval is every 24 hours
         self.running = False
         self.thread = None
 
@@ -87,7 +87,7 @@ class AutomatedWatering:
         if self.thread:
             self.thread.join()
 
-    # Change automation interval
+    # Change interval
     def set_interval(self, hours):
         self.interval = hours
 
