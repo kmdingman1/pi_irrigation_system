@@ -1,22 +1,21 @@
 import RPi.GPIO as GPIO
 import time
 
-# Setup
 GPIO.setmode(GPIO.BCM)
 
-# Pin assignments for the sensors
+# Sensor GPIO pind
 sensors = {
-    1: 17,  # Sensor 1 is connected to GPIO 17
-    2: 27,  # Sensor 2 is connected to GPIO 27
-    3: 23,  # Sensor 3 is connected to GPIO 23
-    4: 24   # Sensor 4 is connected to GPIO 24
+    1: 17,  # Sensor 1 
+    2: 27,  # Sensor 2
+    3: 23,  # Sensor 3 
+    4: 24   # Sensor 4 
 }
 
-# Set up each GPIO pin as an input
+# Set up GPIO pins as an input
 for sensor, pin in sensors.items():
     GPIO.setup(pin, GPIO.IN)
 
-# Function to read the sensor values
+# Read sensor values
 def read_sensors():
     for sensor, pin in sensors.items():
         if GPIO.input(pin):  # If digital output is HIGH, soil is dry
@@ -27,7 +26,7 @@ def read_sensors():
 try:
     while True:
         print("Checking moisture sensors...")
-        read_sensors()  # Check the sensors
-        time.sleep(2)   # Wait for 2 seconds before checking again
+        read_sensors()  # Check sensors
+        time.sleep(2)   # Wait for 2 sec before checking again
 finally:
-    GPIO.cleanup()  # Reset GPIO settings when exiting
+    GPIO.cleanup()  
