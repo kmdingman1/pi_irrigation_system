@@ -1,18 +1,17 @@
 import RPi.GPIO as GPIO
 import time
 
-# Set up
 GPIO.setmode(GPIO.BCM)
 
 # Pump GPIO pins
 PUMP_PINS = [4, 22, 6, 26]
 
-# Set up GPIO pins as outputs, ensure pump start in OFF state
+# Set up GPIO pins as output
 for pin in PUMP_PINS:
     GPIO.setup(pin, GPIO.OUT)
-    GPIO.output(pin, GPIO.LOW)  # LOW = pump OFF
+    GPIO.output(pin, GPIO.LOW)  # make sure pumps start OFF
 
-# Function to test pumps
+# Test each pump
 def run_pump(pump_number, duration):
     pin = PUMP_PINS[pump_number - 1]
     print(f"Running pump {pump_number} on GPIO {pin}")
